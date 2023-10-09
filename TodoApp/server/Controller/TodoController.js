@@ -23,4 +23,15 @@ const getAllToDos = async (req, res) => {
   }
 };
 
-module.exports = {createToDo, getAllToDos}
+const deleteTodos = async(req, res) => {
+  try{
+    const todoId = req.params.id;
+    console.log("id", todoId);
+    const deleteTodos = await ToDo.findByIdAndDelete(todoId);
+    res.status(200).json(deleteTodos);
+  }catch(err){
+    res.status(500).json({message:"Error occured"});
+  }
+}
+
+module.exports = {createToDo, getAllToDos, deleteTodos}

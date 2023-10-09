@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FormControl } from '@mui/base';
 
 function TodoForm({ addTodo }) {
   const [title, setTitle] = useState('');
@@ -29,6 +30,23 @@ function TodoForm({ addTodo }) {
       <button type="submit">Add Task</button>
     </form>
   );
+
+  // return (
+  //   <FormControl >
+  //     <input 
+  //     type="text" 
+  //     placeholder='Title' 
+  //     value = {title} 
+  //     onChange={(e) => setTitle(e.target.value)}/>
+  //     <input 
+  //     type="text" 
+  //     placeholder="Description" 
+  //     value={description} 
+  //     onChange={(e) => setDescription(e.target.value)}/>
+  //     <button type="submit" onSubmit={handleSubmit}>Add Task</button>
+
+  //   </FormControl>
+  // );
 }
 
 export default TodoForm;
