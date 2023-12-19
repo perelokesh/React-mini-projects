@@ -5,38 +5,28 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const signupUser = async(req,res) => {
-   const {username , password} = req.body;
-   const checkUser = await User.findOne({username: username})
-   if(checkUser){
-    res.status(402).json({message: 'user already exists'})
-   } else {
-    const hashedPassword = await bcrypt.hash(password,10);
-    const user = new User({username, password:hashedPassword});
-    console.log(user);
+  try {
+    const {username, password} =req.body;
+    const checkUser = await User.findOne({username: username})
+    if(checkUser){
+      res.status(402).json({message: 'user already exists'})
+    }
+    const hashedPwd = await bcrypt.hash(password, 10);
+    const user = new User({username, password:hashedPwd});
     await user.save();
-    return res.status(200).json({message:"User Created Succesfully"});
-   }
+    res.json({message:"User created successfully"})
+  } catch (error) {
+    res.status(500).json({error: 'Registration failed'})
+  }
 };
 
 const loginUser = async(req,res) => {
-  const {username, password} = req.headers;
-  const user = await User.findOne({username: username});
-  const comparePwd = await bcrypt.compare(password, user.password);
-  if(user && comparePwd) {
-    const token = jwt.sign({
-      user:{
-        id : user.id,
-        username: user.username
-      },role: "user",
-    }, 
-    process.env.Secret,
-    {expiresIn:"1h"}
-    );
-    res.status(200).json({token});
-  }else{
-    res.status(401).json({message: "Username or password is wrong"});
-    throw new Error("Username or password is wrong")
-  }
+  const {username} = req.body;
+  const user = new User({username});
+  await user.save();
+  const token = jwt.sign({username}, process.env.SECRET, {expiresIn:'1h'});
+  // res.cookie('jwt', token,{httpOnly:true}).send({token});
+  res.json(token);
 }
 
 module.exports = {signupUser, loginUser}

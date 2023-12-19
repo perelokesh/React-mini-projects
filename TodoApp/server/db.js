@@ -6,7 +6,7 @@ const connectionParams = {
   useUnifiedTopology: true,
   // useCreateIndex: true,
   // useFindAndModify: false,
-  dbName: 'Todo_App'
+  dbName: 'Todo'
 
 };
 const connection = process.env.DB;
